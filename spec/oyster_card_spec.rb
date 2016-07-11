@@ -7,12 +7,22 @@ describe OysterCard do
       expect(subject.balance).to be_a(Fixnum)
     end
   end
+
   context "Top up" do
     it 'should top up card by 5' do
       expect{subject.top_up(5)}.to change{ subject.balance }.by 5
     end
     it 'should not allow to top up above limit' do
-      expect{subject.top_up(95)}.to raise_error "You are exceeding the limit of £#{OysterCard::LIMIT}"
+      subject.top_up(OysterCard::LIMIT)
+      message = "You are exceeding the limit of £#{OysterCard::LIMIT}"
+      expect{subject.top_up(1)}.to raise_error message
+    end
+  end
+
+  context "Deduct" do
+    it 'should deduct the correct fare from the balance' do
+      subject.top_up(1)
+      expect{ subject.deduct(1) }.to change{ subject.balance }.by -1
     end
   end
 end
