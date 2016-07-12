@@ -7,6 +7,8 @@ require 'oystercard'
 
 describe Oystercard do
 
+let(:station) { double(:entry_station)}
+
   context 'when a new card is initialized' do
    it 'has a default balance of zero' do
      card = described_class.new
@@ -39,23 +41,19 @@ describe Oystercard do
   end
 
   describe '#touch_in' do
+
     it 'checks the card has a minimum balance' do
       message = "At least £#{described_class::MINIMUM_FARE} required"
       expect{ subject.touch_in }.to raise_error message
     end
 
-    it 'is in journey after touching in' do
-      subject.top_up(described_class::MAX_LIMIT)
-      subject.touch_in
-      expect(subject).to be_in_journey
-    end
   end
 
-  describe '#touch_out' do
+  describe 'when in_journey' do
 
     before do
       subject.top_up(described_class::MAX_LIMIT)
-      subject.touch_in
+      subject.touch_in(station)
     end
 
     it 'deducts the minimum fare after touching out' do
@@ -66,6 +64,18 @@ describe Oystercard do
     it 'ends the journey after touching out' do
       subject.touch_out
       expect(subject).not_to be_in_journey
+    end
+
+    it 'forgets the stored station' do
+      expect {subject.touch_out }.to change{ subject.entry_station }.to nil
+    end
+
+    it 'is in journey after touching in' do
+      expect(subject).to be_in_journey
+    end
+
+    it 'remembers entry_station' do
+      expect(subject.entry_station).to eq(station)
     end
   end
 
