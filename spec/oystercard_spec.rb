@@ -32,7 +32,7 @@ describe Oystercard do
     describe "when touching in" do
       before (:each) do
         card.top_up(Oystercard::MINIMUM_FARE)
-        card.touch_in
+        card.touch_in('station')
       end
 
       it "is in a journey after touch in" do
@@ -53,7 +53,11 @@ describe Oystercard do
     it "raises an error if a card with insufficient balance is touched in" do
       card.top_up (Oystercard::MINIMUM_FARE - 1)
       message = "Insufficient balance. Minimum £#{Oystercard::MINIMUM_FARE} is required"
-      expect{card.touch_in}.to raise_error message
+      expect{card.touch_in('station')}.to raise_error message
+    end
+
+    it "remembers the touch in station" do
+      expect(card).to respond_to(:touch_in).with(1).argument
     end
 
   end # end context

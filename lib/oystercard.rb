@@ -19,8 +19,9 @@ class Oystercard
     in_journey
   end
 
-  def touch_in
+  def touch_in station
     fail "Insufficient balance. Minimum £#{MINIMUM_FARE} is required" if @balance < MINIMUM_FARE
+    
     self.in_journey = true
   end
 
