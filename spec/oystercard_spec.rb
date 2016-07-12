@@ -9,7 +9,7 @@ describe Oystercard do
 
   context 'when a new card is initialized' do
    it 'has a default balance of zero' do
-     card = Oystercard.new
+     card = described_class.new
      expect(subject.balance).to eq(0)
    end
   end
@@ -22,6 +22,12 @@ describe Oystercard do
     it 'increases the balance on the card by the argument' do
       subject.top_up(10)
       expect{ subject.top_up 10 }.to change{ subject.balance }.by 10
+    end
+
+    it 'raises an error when topping up above the limit' do
+      subject.top_up(described_class::MAX_LIMIT)
+      message = "Maximum balance of #{described_class::MAX_LIMIT} reached"
+      expect{ subject.top_up(1) }.to raise_error message
     end
   end
 
