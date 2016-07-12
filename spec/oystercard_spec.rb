@@ -1,6 +1,7 @@
 require "oystercard"
 describe Oystercard do
   subject(:card){described_class.new}
+
   context "new card " do
     it "has default balance zero" do
       expect(card.balance).to eq 0
@@ -28,25 +29,28 @@ describe Oystercard do
       expect(card).not_to be_in_journey
     end
 
-    it "is in a journey after touch in" do
-      card.top_up(2)
-      card.touch_in
-      expect(card).to be_in_journey
-    end
+    describe "when touching in" do
+      before (:each) do
+        card.top_up(Oystercard::MINIMUM_BALANCE)
+        card.touch_in
+      end
 
-    it "is not in a journey after touch out" do
-      card.top_up(2)
-      card.touch_in
-      card.touch_out
-      expect(card).not_to be_in_journey
-    end
+      it "is in a journey after touch in" do
+        expect(card).to be_in_journey
+      end
 
-    it "raises an error if a card with insufficient balance is touched in" do
-      card.top_up(0.5)
-      expect{card.touch_in}.to raise_error "Insufficient balance"
-    end
+      it "is not in a journey after touch out" do
+        card.touch_out
+        expect(card).not_to be_in_journey
+      end
 
+      it "raises an error if a card with insufficient balance is touched in" do
+        card.deduct(1)
+        expect{card.touch_in}.to raise_error "Insufficient balance. Minimum £#{Oystercard::MINIMUM_BALANCE} is required"
+      end
 
-  end
+    end # end describe
 
-end
+  end # end context
+
+end # end describe
