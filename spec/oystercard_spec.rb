@@ -1,7 +1,7 @@
 require "oystercard"
 describe Oystercard do
   subject(:card){ described_class.new }
-  let(:station) { station = double(:station) }
+  let(:station) { double(:station) }
 
   context "new card " do
     it "has default balance zero" do
@@ -10,22 +10,22 @@ describe Oystercard do
   end
 
   context "changing balance" do
+
     it "tops up balance" do
       expect{card.top_up(5)}.to change{card.balance}.by(5)
     end
+
     it "raises error if over max. balance" do
       maximum_balance = Oystercard::LIMIT
       card.top_up(maximum_balance)
       message = "card limit #{maximum_balance} exceeded"
       expect{card.top_up(1)}.to raise_error message
     end
-    #it "deducts fare from balance" do
-    #  card.top_up(10)
-    #  expect{card.deduct(5)}. to change{card.balance}. by(-5)
-    #end
+
   end
 
   context "using card to touch in and out" do
+
     it "shows if new card is in journey" do
       expect(card).not_to be_in_journey
     end
@@ -49,16 +49,16 @@ describe Oystercard do
         expect{card.touch_out}.to change {card.balance}.by (-Oystercard::MINIMUM_FARE)
       end
 
+      it "remembers the touch in station" do
+        expect(card.entry_station).to eq station
+      end
+
     end # end describe
 
     it "raises an error if a card with insufficient balance is touched in" do
       card.top_up (Oystercard::MINIMUM_FARE - 1)
       message = "Insufficient balance. Minimum £#{Oystercard::MINIMUM_FARE} is required"
       expect{card.touch_in(station)}.to raise_error message
-    end
-
-    it "remembers the touch in station" do
-      expect(card).to respond_to(:touch_in).with(1).argument
     end
 
   end # end context
