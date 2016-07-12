@@ -1,4 +1,4 @@
-
+require_relative 'journey'
 class Oystercard
   MAX_LIMIT = 90
   MINIMUM_FARE = 1
@@ -7,7 +7,7 @@ class Oystercard
 
   def initialize
      @balance = 0
-     @journey = {}
+     @journey = Journey.new
      @history = []
   end
 
@@ -17,17 +17,17 @@ class Oystercard
   end
 
   def in_journey?
-    !!journey[:entry]
+    !journey.complete?
   end
 
   def touch_in(station = nil)
     fail "At least £#{MINIMUM_FARE} required" if balance < MINIMUM_FARE
-    @journey[:entry] = station
+    journey.start(station)
   end
 
   def touch_out(station = nil)
-    deduct(MINIMUM_FARE)
-    @journey[:exit] = station
+    journey.end(station)
+    deduct(journey.fare)
     save_journey
   end
 
@@ -39,7 +39,7 @@ class Oystercard
 
   def save_journey
     @history << journey
-    @journey = Hash.new
+    @journey = Journey.new
   end
 
 end
