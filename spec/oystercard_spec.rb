@@ -50,7 +50,13 @@ describe Oystercard do
   end
 
   describe '#touch_in' do
+    it 'checks the card has a minimum balance' do
+      message = "At least £#{described_class::MINIMUM_FARE} required"
+      expect{ subject.touch_in }.to raise_error message
+    end
+
     it 'is in journey after touching in' do
+      subject.top_up(10)
       subject.touch_in
       expect(subject).to be_in_journey
     end
@@ -58,6 +64,7 @@ describe Oystercard do
 
   describe '#touch_out' do
     it 'ends the journey after touching out' do
+      subject.top_up(10)
       subject.touch_in
       subject.touch_out
       expect(subject).not_to be_in_journey

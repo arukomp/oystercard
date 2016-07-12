@@ -1,6 +1,7 @@
 
 class Oystercard
   MAX_LIMIT = 90
+  MINIMUM_FARE = 1
 
   attr_accessor :balance, :in_use
 
@@ -23,6 +24,7 @@ class Oystercard
   end
 
   def touch_in
+    fail "At least £#{MINIMUM_FARE} required" if balance < MINIMUM_FARE
     self.in_use = true
   end
 
