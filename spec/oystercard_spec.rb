@@ -9,7 +9,13 @@ describe Oystercard do
 
   context "changing balance" do
     it "tops up balance" do
-      expect{card.top_up(5)}.to change{card.balance}.by(5) 
+      expect{card.top_up(5)}.to change{card.balance}.by(5)
+    end
+    it "raises error if over max. balance" do
+      maximum_balance = Oystercard::LIMIT
+      card.top_up(maximum_balance)
+      message = "card limit #{maximum_balance} exceeded"
+      expect{card.top_up(1)}.to raise_error message
     end
   end
 end
