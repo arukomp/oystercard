@@ -20,7 +20,6 @@ describe Oystercard do
     end
 
     it 'increases the balance on the card by the argument' do
-      subject.top_up(10)
       expect{ subject.top_up 10 }.to change{ subject.balance }.by 10
     end
 
@@ -28,6 +27,13 @@ describe Oystercard do
       subject.top_up(described_class::MAX_LIMIT)
       message = "Maximum balance of #{described_class::MAX_LIMIT} reached"
       expect{ subject.top_up(1) }.to raise_error message
+    end
+  end
+
+  describe '#deduct' do
+    it 'deducts money from balance' do
+      subject.top_up(10)
+      expect{ subject.deduct 10 }.to change{ subject.balance }.by -10
     end
   end
 
