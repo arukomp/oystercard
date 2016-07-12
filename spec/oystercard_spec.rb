@@ -18,10 +18,10 @@ describe Oystercard do
       message = "card limit #{maximum_balance} exceeded"
       expect{card.top_up(1)}.to raise_error message
     end
-    it "deducts fare from balance" do
-      card.top_up(10)
-      expect{card.deduct(5)}. to change{card.balance}. by(-5)
-    end
+    #it "deducts fare from balance" do
+    #  card.top_up(10)
+    #  expect{card.deduct(5)}. to change{card.balance}. by(-5)
+    #end
   end
 
   context "using card to touch in and out" do
@@ -31,7 +31,7 @@ describe Oystercard do
 
     describe "when touching in" do
       before (:each) do
-        card.top_up(Oystercard::MINIMUM_BALANCE)
+        card.top_up(Oystercard::MINIMUM_FARE)
         card.touch_in
       end
 
@@ -44,12 +44,17 @@ describe Oystercard do
         expect(card).not_to be_in_journey
       end
 
-      it "raises an error if a card with insufficient balance is touched in" do
-        card.deduct(1)
-        expect{card.touch_in}.to raise_error "Insufficient balance. Minimum £#{Oystercard::MINIMUM_BALANCE} is required"
+      it "deducts the minimum fare for a journey on touch out" do
+        expect{card.touch_out}.to change {card.balance}.by (-Oystercard::MINIMUM_FARE)
       end
 
     end # end describe
+
+    it "raises an error if a card with insufficient balance is touched in" do
+      card.top_up (Oystercard::MINIMUM_FARE - 1)
+      message = "Insufficient balance. Minimum £#{Oystercard::MINIMUM_FARE} is required"
+      expect{card.touch_in}.to raise_error message
+    end
 
   end # end context
 
