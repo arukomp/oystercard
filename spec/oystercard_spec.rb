@@ -7,13 +7,18 @@ require 'oystercard'
 
 describe Oystercard do
 
-let(:station) { double(:entry_station)}
+  let(:station) { double(:entry_station)}
+  let(:station2) { double(:exit_station) }
+  let(:journey) { {entry: station, exit: station2} }
 
   context 'when a new card is initialized' do
-   it 'has a default balance of zero' do
-     card = described_class.new
-     expect(subject.balance).to eq(0)
-   end
+    it 'has a default balance of zero' do
+      expect(subject.balance).to eq(0)
+    end
+
+    it 'has an empty journey history' do
+      expect(subject.history).to be_empty
+    end
   end
 
   describe 'when a card is topped up' do
@@ -67,7 +72,7 @@ let(:station) { double(:entry_station)}
     end
 
     it 'forgets the stored station' do
-      expect {subject.touch_out }.to change{ subject.entry_station }.to nil
+      expect {subject.touch_out }.to change{ subject.journey[:entry] }.to nil
     end
 
     it 'is in journey after touching in' do
@@ -75,7 +80,12 @@ let(:station) { double(:entry_station)}
     end
 
     it 'remembers entry_station' do
-      expect(subject.entry_station).to eq(station)
+      expect(subject.journey[:entry]).to eq(station)
+    end
+
+    it 'creates a journey after touching in and out' do
+      subject.touch_out(station2)
+      expect(subject.history).to include(journey)
     end
   end
 
