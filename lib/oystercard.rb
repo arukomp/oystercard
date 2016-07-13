@@ -2,12 +2,15 @@ class Oystercard
 
   attr_accessor :balance
   attr_accessor :entry_station
+  attr_reader :exit_station, :journeys
+
 
   LIMIT = 90
   MINIMUM_FARE = 1
 
   def initialize
     @balance = 0
+    @journeys = []
   end
 
   def top_up(amount)
@@ -24,9 +27,10 @@ class Oystercard
     @entry_station = station
   end
 
-  def touch_out
+  def touch_out station
     deduct(MINIMUM_FARE)
     self.entry_station = nil
+    @exit_station = station
   end
 
   private

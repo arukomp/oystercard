@@ -7,6 +7,10 @@ describe Oystercard do
     it "has default balance zero" do
       expect(card.balance).to eq 0
     end
+
+    it "has an empty journey history" do
+      expect(card.journeys).to eq []
+    end
   end
 
   context "changing balance" do
@@ -30,7 +34,7 @@ describe Oystercard do
       expect(card).not_to be_in_journey
     end
 
-    describe "when touching in" do
+    describe "when touching in and out" do
       before (:each) do
         card.top_up(Oystercard::MINIMUM_FARE)
         card.touch_in(station)
@@ -41,19 +45,37 @@ describe Oystercard do
       end
 
       it "is not in a journey after touch out" do
-        card.touch_out
+        card.touch_out(station)
         expect(card).not_to be_in_journey
       end
 
       it "deducts the minimum fare for a journey on touch out" do
-        expect{card.touch_out}.to change {card.balance}.by (-Oystercard::MINIMUM_FARE)
+        expect{card.touch_out(station)}.to change {card.balance}.by (-Oystercard::MINIMUM_FARE)
       end
 
       it "remembers the touch in station" do
         expect(card.entry_station).to eq station
       end
 
+      it "remembers the touch out station" do
+        card.touch_out(station)
+        expect(card.exit_station).to eq station
+      end
+
     end # end describe
+
+    describe "recording journey history" do
+
+      before (:each) do
+        card.top_up(Oystercard::MINIMUM_FARE)
+        card.touch_in(station)
+        card.touch_out(station)
+      end
+
+      it "stores a list of journeys" do
+        expect(card.journeys.length).to eq 1
+      end
+    end
 
     it "raises an error if a card with insufficient balance is touched in" do
       card.top_up (Oystercard::MINIMUM_FARE - 1)
