@@ -3,6 +3,8 @@ require 'oystercard'
 describe Oystercard do
 min_fare = Oystercard::MINFARE
 let(:entry_station) {double('entry_station')}
+let(:exit_station) {double('exit_station')}
+let(:journey) {{:enter => entry_station, :exit => exit_station}}
 
   it 'shows card balance' do
     expect(subject.balance).to eq 0
@@ -13,21 +15,21 @@ let(:entry_station) {double('entry_station')}
   end
 
   describe '#touch_in' do
-    it 'can touch_in' do
+    before do
       subject.top_up(min_fare)
       subject.touch_in entry_station
+    end
+    it 'can touch_in' do
       expect(subject).to be_in_journey
     end
-
-    context 'balance below minimum fare' do
-      it 'raises error if balance is less than minimum fare' do
-        expect{subject.touch_in entry_station}.to raise_error "balance too low"
-      end
+    it 'stores entry station' do
+      expect(subject.journey[:enter]).to eq entry_station
     end
-    it 'stores entery station' do
-      subject.top_up min_fare
-      subject.touch_in entry_station
-      expect(subject.entry_station).to eq entry_station
+  end
+
+  context 'balance below minimum fare' do
+    it 'raises error if balance is less than minimum fare' do
+      expect{subject.touch_in entry_station}.to raise_error "balance too low"
     end
   end
 
@@ -38,15 +40,15 @@ let(:entry_station) {double('entry_station')}
       subject.touch_in entry_station
     end
     it 'deducts the fare when we touch out' do
-      expect{subject.touch_out}.to change {subject.balance}.by -min_fare
+      expect{subject.touch_out exit_station}.to change {subject.balance}.by -min_fare
     end
     it 'can touch out' do
-      subject.touch_out
+      subject.touch_out exit_station
       expect(subject).not_to be_in_journey
     end
-    it 'sets entry_station to nil' do
-      subject.touch_out
-      expect(subject.entry_station).to be_nil
+    it 'sets entry station to nil' do
+      subject.touch_out exit_station
+      expect(subject.journey[:enter]).to be_nil
     end
   end
 
@@ -69,8 +71,8 @@ let(:entry_station) {double('entry_station')}
     it 'saves journey inside history' do
       subject.top_up min_fare
       subject.touch_in entry_station
-      subject.touch_out
-      expect(subject.history).to_not be_empty
+      subject.touch_out exit_station
+      expect(subject.history).to include journey
     end
   end
 
