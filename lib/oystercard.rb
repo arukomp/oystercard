@@ -23,7 +23,8 @@ class Oystercard
   end
 
   def touch_in station
-    fail "Insufficient balance. Minimum £#{MINIMUM_FARE} is required" if @balance < MINIMUM_FARE
+    message = "Insufficient balance. Minimum £#{MINIMUM_FARE} is required"
+    fail message if @balance < MINIMUM_FARE
     @current_journey = {:entry => station}
   end
 
