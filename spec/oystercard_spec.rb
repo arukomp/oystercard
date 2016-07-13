@@ -9,7 +9,7 @@ describe Oystercard do
     end
 
     it "has an empty journey history" do
-      expect(card.journey_history).to eq []
+      expect(card.journey_history).to be_empty
     end
   end
 
