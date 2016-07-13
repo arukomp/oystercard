@@ -32,20 +32,19 @@ let(:entry_station) {double('entry_station')}
   end
 
   describe '#touch_out' do
-    it 'deducts the fare when we touch out' do
+
+    before do
       subject.top_up(min_fare)
       subject.touch_in entry_station
+    end
+    it 'deducts the fare when we touch out' do
       expect{subject.touch_out}.to change {subject.balance}.by -min_fare
     end
     it 'can touch out' do
-      subject.top_up(min_fare)
-      subject.touch_in entry_station
       subject.touch_out
       expect(subject).not_to be_in_journey
     end
     it 'sets entry_station to nil' do
-      subject.top_up min_fare
-      subject.touch_in entry_station
       subject.touch_out
       expect(subject.entry_station).to be_nil
     end
@@ -60,6 +59,18 @@ let(:entry_station) {double('entry_station')}
       limit = Oystercard::LIMIT
       subject.top_up(limit)
       expect{subject.top_up(1)}.to raise_error("limit #{limit} reached")
+    end
+  end
+
+  describe "#history" do
+    it 'returns journey history' do
+      expect(subject.history).to be_empty
+    end
+    it 'saves journey inside history' do
+      subject.top_up min_fare
+      subject.touch_in entry_station
+      subject.touch_out
+      expect(subject.history).to_not be_empty
     end
   end
 
