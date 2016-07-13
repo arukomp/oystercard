@@ -9,7 +9,7 @@ describe Oystercard do
     end
 
     it "has an empty journey history" do
-      expect(card.journeys).to eq []
+      expect(card.journey_history).to eq []
     end
   end
 
@@ -73,7 +73,7 @@ describe Oystercard do
       end
 
       it "stores a list of journeys" do
-        expect(card.journeys.length).to eq 1
+        expect(card.journey_history.length).to eq 1
       end
     end
 
