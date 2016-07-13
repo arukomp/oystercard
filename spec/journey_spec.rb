@@ -2,12 +2,12 @@ require 'journey'
 
 describe Journey do
   let(:station) { double(:station) }
-  subject(:trip) { described_class.new('bank')}
+  subject(:trip) { described_class.new(station)}
 
   context "when touched in" do
 
     it "accept the touch in station" do
-      expect(trip.journey[:entry]).to eq 'bank'
+      expect(trip.journey[:entry]).to eq station
     end
 
     it "knows a journey is incomplete" do
@@ -35,9 +35,9 @@ describe Journey do
 
   end
 
-  context "it calculates a fare" do
+  context "calculates" do
 
-    it "calculates a penalty fare when journey is incomplete" do
+    it "a penalty fare when journey is incomplete" do
       expect(trip.fare).to eq Journey::PENALTY_FARE
     end
 
