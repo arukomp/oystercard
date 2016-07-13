@@ -31,9 +31,9 @@ describe Oystercard do
 
   context "using card to touch in and out" do
 
-    it "shows if new card is in journey" do
-      expect(card).not_to be_in_journey
-    end
+    # it "shows if new card is in journey" do
+    #   expect(card).not_to be_in_journey
+    # end
 
     describe "when touching in and out" do
       before (:each) do
@@ -41,18 +41,18 @@ describe Oystercard do
         card.touch_in(station)
       end
 
-      it "starts a new journey" do
-        expect(card.current_journey[:entry]).to eq station
-      end
+      # it "starts a new journey" do
+      #   expect(card.current_journey[:entry]).to eq station
+      # end
 
-      it "is in a journey after touch in" do
-        expect(card).to be_in_journey
-      end
-
-      it "is not in a journey after touch out" do
-        card.touch_out(station)
-        expect(card).not_to be_in_journey
-      end
+      # it "is in a journey after touch in" do
+      #   expect(card).to be_in_journey
+      # end
+      #
+      # it "is not in a journey after touch out" do
+      #   card.touch_out(station)
+      #   expect(card).not_to be_in_journey
+      # end
 
       it "deducts the minimum fare for a journey on touch out" do
         expect{card.touch_out(station)}.to change {card.balance}.by (-Oystercard::MINIMUM_FARE)
