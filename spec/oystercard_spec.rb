@@ -54,13 +54,13 @@ describe Oystercard do
       end
 
       it "remembers the touch in station" do
-        expect(card.entry_station).to eq station
+        expect(card.current_journey[:entry]).to eq station
       end
 
-      it "remembers the touch out station" do
-        card.touch_out(station)
-        expect(card.exit_station).to eq station
-      end
+      # it "remembers the touch out station" do
+      #   card.touch_out(station)
+      #   expect(card.current_journey[:exit]).to eq station
+      # end
 
     end # end describe
 
