@@ -1,3 +1,6 @@
+require_relative 'station'
+require_relative 'journey'
+
 class Oystercard
 
   attr_accessor :balance
@@ -24,7 +27,8 @@ class Oystercard
   def touch_in station
     message = "Insufficient balance. Minimum £#{MINIMUM_FARE} is required"
     fail message if @balance < MINIMUM_FARE
-    @current_journey = {:entry => station}
+    @current_journey = Journey.new
+    @current_journey.start_journey(station)
   end
 
   def touch_out station

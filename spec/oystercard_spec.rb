@@ -2,6 +2,7 @@ require "oystercard"
 describe Oystercard do
   subject(:card){ described_class.new }
   let(:station) { double(:station) }
+  let(:journey) { double(:journey) }
 
   context "new card " do
     it "has default balance zero" do
@@ -40,6 +41,10 @@ describe Oystercard do
         card.touch_in(station)
       end
 
+      it "starts a new journey" do
+        expect(card.current_journey[:entry]).to eq station
+      end
+
       it "is in a journey after touch in" do
         expect(card).to be_in_journey
       end
@@ -52,15 +57,6 @@ describe Oystercard do
       it "deducts the minimum fare for a journey on touch out" do
         expect{card.touch_out(station)}.to change {card.balance}.by (-Oystercard::MINIMUM_FARE)
       end
-
-      it "remembers the touch in station" do
-        expect(card.current_journey[:entry]).to eq station
-      end
-
-      # it "remembers the touch out station" do
-      #   card.touch_out(station)
-      #   expect(card.current_journey[:exit]).to eq station
-      # end
 
     end # end describe
 
