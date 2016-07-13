@@ -3,7 +3,6 @@ class Oystercard
   attr_accessor :balance
   attr_reader :current_journey, :journey_history
 
-
   LIMIT = 90
   MINIMUM_FARE = 1
 
