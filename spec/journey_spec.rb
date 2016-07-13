@@ -28,6 +28,18 @@ describe Journey do
     it "knows when a journey is complete" do
       expect(trip.journey_complete?).to be true
     end
+
+    it "calculates a minimum fare when journey is complete" do
+      expect(trip.fare).to eq Journey::MINIMUM_FARE
+    end
+
   end
 
+  context "it calculates a fare" do
+
+    it "calculates a penalty fare when journey is incomplete" do
+      expect(trip.fare).to eq Journey::PENALTY_FARE
+    end
+
+  end
 end

@@ -37,7 +37,7 @@ describe Oystercard do
 
     describe "when touching in and out" do
       before (:each) do
-        card.top_up(Oystercard::MINIMUM_FARE)
+        card.top_up(Journey::MINIMUM_FARE)
         card.touch_in(station)
       end
 
@@ -55,7 +55,7 @@ describe Oystercard do
       # end
 
       it "deducts the minimum fare for a journey on touch out" do
-        expect{card.touch_out(station)}.to change {card.balance}.by (-Oystercard::MINIMUM_FARE)
+        expect{card.touch_out(station)}.to change {card.balance}.by (-Journey::MINIMUM_FARE)
       end
 
     end # end describe
@@ -63,7 +63,7 @@ describe Oystercard do
     describe "recording journey history" do
 
       before (:each) do
-        card.top_up(Oystercard::MINIMUM_FARE)
+        card.top_up(Journey::MINIMUM_FARE)
         card.touch_in(station)
         card.touch_out(station)
       end
@@ -74,8 +74,8 @@ describe Oystercard do
     end
 
     it "raises an error if a card with insufficient balance is touched in" do
-      card.top_up (Oystercard::MINIMUM_FARE - 1)
-      message = "Insufficient balance. Minimum £#{Oystercard::MINIMUM_FARE} is required"
+      card.top_up (Journey::MINIMUM_FARE - 1)
+      message = "Insufficient balance. Minimum £#{Journey::MINIMUM_FARE} is required"
       expect{card.touch_in(station)}.to raise_error message
     end
 
