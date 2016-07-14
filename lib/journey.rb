@@ -17,10 +17,11 @@ class Journey
   def finish(exit_station)
     @in_journey = false
     @exit_station = exit_station
+    fare
   end
 
   def complete?
-    !!@entry_station and !!@exit_station ? true : false
+    !!@entry_station and !!@exit_station
   end
 
   def fare
