@@ -56,8 +56,9 @@ describe Oystercard do
 
   context '#journeys' do
     it 'it has ability to stores journeys' do
-      subject.journeys
+      expect(subject.journeys).to be_empty
     end
+
     it 'it has the ability to create a journey by touching in and out' do
       subject.top_up(1)
       subject.touch_in(entry_station)
