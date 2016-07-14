@@ -33,10 +33,6 @@ describe Oystercard do
       expect {subject.touch_in(entry_station)}.to raise_error "Sorry, insufficient funds"
     end
 
-    it 'records entry station' do
-      subject.top_up(1)
-      subject.touch_in(entry_station)
-    end
   end
 
   context '#touch_out' do
@@ -47,11 +43,6 @@ describe Oystercard do
       expect { subject.touch_out(exit_station) }.to change { subject.balance }.by(-1)
     end
 
-    it 'records exit stations' do
-        subject.top_up(1)
-        subject.touch_in(entry_station)
-        subject.touch_out(exit_station)
-    end
   end
 
   context '#journeys' do

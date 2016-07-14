@@ -7,5 +7,4 @@ class Station
     @name = args[:name]
     @zone = args[:zone]
   end
-
 end
