@@ -5,8 +5,7 @@ class Oystercard
 
   LIMIT = 90
 
-  attr_accessor :balance
-  attr_reader :current_journey, :journey_history
+  attr_reader :balance, :current_journey, :journey_history
 
   def initialize
     @balance = 0
