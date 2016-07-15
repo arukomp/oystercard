@@ -19,8 +19,12 @@ class Journey
   end
 
   def fare
-    return MINIMUM_FARE if journey_complete?
-    PENALTY_FARE
+    if journey_complete?
+      MINIMUM_FARE + (journey[:entry].zone - journey[:exit].zone).abs
+    else
+      PENALTY_FARE
+    end
+
   end
 
 end

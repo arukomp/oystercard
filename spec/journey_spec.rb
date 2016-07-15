@@ -1,8 +1,9 @@
 require 'journey'
 
 describe Journey do
-  let(:station) { double(:station) }
+  let(:station) { double('station', :zone => 2) }
   subject(:trip) { described_class.new(station)}
+  let(:station2) { double('station2', :zone => 6) }
 
   context "when touched in" do
 
@@ -39,6 +40,11 @@ describe Journey do
 
     it "a penalty fare when journey is incomplete" do
       expect(trip.fare).to eq Journey::PENALTY_FARE
+    end
+
+    it "calculates the fare between two journey zones" do
+      trip.end_journey(station2)
+      expect(trip.fare).to eq 5
     end
 
   end
