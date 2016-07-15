@@ -1,5 +1,6 @@
 require "oystercard"
 
+
 describe Oystercard do
   subject(:card){ described_class.new }
   let(:station) { double(:station) }

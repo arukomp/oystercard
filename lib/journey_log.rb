@@ -1,25 +1,31 @@
+require_relative 'journey'
+
 class JourneyLog
 
-  attr_reader :journey
+  attr_reader :journey, :journey_class
 
-  def initialize
-    # @current_journey = {}
+  def initialize(journey_class)
+    @journey_class = journey_class
+    @journeys = []
+    @journey = journey_class.new
   end
 
   def start(station)
-    @journey = Journey.new(station)
+    @journey = journey_class.new(station)
   end
 
   def finish(station)
     @journey.end_journey(station)
-  end
-
-  def journeys
-    #returns protected array of journey history
+    @journeys << journey.journey
   end
 
   def current_journey
-    #incomplete_journey || Journey.new
+    return journey_class.new if @journey.journey_complete?
+    @journey
+  end
+
+  def journeys
+    @journeys.clone
   end
 
 end
