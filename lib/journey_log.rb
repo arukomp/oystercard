@@ -16,8 +16,8 @@ class JourneyLog
   end
 
   def finish(station)
+    @journeys << { entry: @journey.journey[:entry], exit: station }
     current_journey.end_journey(station)
-    @journeys << @journey.journey
   end
 
   def journeys

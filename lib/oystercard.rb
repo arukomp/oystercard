@@ -21,7 +21,7 @@ class Oystercard
   def touch_in(station)
     message = "Insufficient balance. Minimum £#{Journey::MINIMUM_FARE} is required"
     fail message if @balance < Journey::MINIMUM_FARE
-    # deduct(@log.journey.fare) if 
+    deduct(@log.journey.fare) if @log.journey.in_journey?
     @log.start(station)
   end
 
