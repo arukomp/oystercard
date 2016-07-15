@@ -14,6 +14,10 @@ class Journey
     @journey[:exit] = station
   end
 
+  def start_journey(station)
+    @journey[:entry] = station
+  end
+
   def journey_complete?
     !!journey[:entry] && !!journey[:exit]
   end

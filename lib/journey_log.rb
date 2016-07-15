@@ -11,21 +11,24 @@ class JourneyLog
   end
 
   def start(station)
-    @journey = journey_class.new(station)
+    # @journey = journey_class.new(station)
+    current_journey.start_journey(station)
   end
 
   def finish(station)
-    @journey.end_journey(station)
-    @journeys << journey.journey
-  end
-
-  def current_journey
-    return journey_class.new if @journey.journey_complete?
-    @journey
+    current_journey.end_journey(station)
+    @journeys << @journey.journey
   end
 
   def journeys
     @journeys.clone
+  end
+
+  private
+
+  def current_journey
+    @journey = journey_class.new if @journey.journey_complete?
+    @journey
   end
 
 end

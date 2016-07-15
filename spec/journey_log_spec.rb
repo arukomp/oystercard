@@ -4,13 +4,7 @@ describe JourneyLog do
   let (:subject) { JourneyLog.new(Journey)}
   let(:entry_station) {double (:station)}
   let(:exit_station) {double (:station)}
-  #let(:journey) {double (:journey)}
   let(:journey) { {entry: entry_station, exit: exit_station} }
-
-  it {is_expected.to respond_to(:start)}
-  it {is_expected.to respond_to(:finish)}
-  it {is_expected.to respond_to(:journeys)}
-  it {is_expected.to respond_to(:current_journey)}
 
   context '#start' do
 
@@ -41,20 +35,6 @@ describe JourneyLog do
 
     it 'saves the journey class paramater' do
       expect(subject.journey_class).to eq Journey
-    end
-  end
-
-  context 'current_journey' do
-
-    it 'returns the current journey when incomplete' do
-      allow(subject.journey).to receive(:journey_complete?).and_return false
-      expect(subject.current_journey).to_not be_journey_complete
-    end
-
-    it 'returns a new journey' do
-      subject.start(entry_station)
-      subject.finish(exit_station)
-      expect(subject.current_journey).to_not be_journey_complete
     end
   end
 

@@ -34,9 +34,15 @@ describe Oystercard do
   context "when touching in" do
 
     it "raises an error if a card with insufficient balance is touched in" do
-      card.top_up (Journey::MINIMUM_FARE - 1)
+      # card.top_up (Journey::MINIMUM_FARE - 1)
       message = "Insufficient balance. Minimum £#{Journey::MINIMUM_FARE} is required"
       expect{card.touch_in(station)}.to raise_error message
+    end
+
+    it 'deducts a penalty fare if forgot to touch_out first' do
+      card.top_up(Journey::MINIMUM_FARE)
+      card.touch_in(station)
+      expect{ card.touch_in(station) }.to change{ card.balance }.by (-Journey::PENALTY_FARE)
     end
   end
 
